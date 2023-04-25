@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Snake Game</title>
+  <link rel="stylesheet" href="snake.css">
+</head>
+<body>
+  <canvas id="canvas" width="600" height="400"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.12.0/p5.min.js"></script>
+  <script>
+    function setup() {
+      createCanvas(600, 400);
+      background(0);
+      // Create the snake
+      snake_head = createVector(200, 200);
+      snake_body = [snake_head];
+      // Set the snake's direction
+      snake_direction = "right";
+      // Create the food
+      food_rect = createRect(400, 300, 20, 20);
+      // Set the score
+      score = 0;
+    }
+
+    function draw() {
+      // Clear the screen
+      background(0);
+      // Move the snake
+      if (snake_direction == "up") {
+        snake_head.y -= 20;
+      } else if (snake_direction == "down") {
+        snake_head.y += 20;
+      } else if (snake_direction == "left") {
+        snake_head.x -= 20;
+      } else if (snake_direction == "right") {
+        snake_head.x += 20;
+      }
+      // Check for collisions
+      // Check if the snake hit the wall
+      if (snake_head.x < 0 || snake_head.x >= width || snake_head.y < 0 || snake_head.y >= height) {
+        gameOver();
+      }
+      // Check if the snake hit itself
+      for (var i = 0; i < snake_body.length - 1; i++) {
+        if (snake_head.intersects(snake_body[i])) {
+          gameOver();
+        }
+      }
+      // Check if the snake ate the food
+      if (snake_head.intersects(food_rect)) {
+        score++;
+        food_rect.x = random(width);
+        food_rect.y = random(height);
+      }
+      // Draw the snake
+      for (var i = 0; i < snake_body.length; i++) {
+        fill(255, 0, 0);
+        ellipse(snake_body[i].x, snake_body[i].y, 20, 20);
+      }
+      // Draw the food
+      fill(0, 255, 0);
+      ellipse(food_rect.x, food_rect.y, 20, 20);
+      // Draw the score
+      text("Score: " + score, 10, 10);
+    }
+
+    function keyPressed() {
+      // Check for key presses
+      if (keyCode == UP) {
+        if (snake_direction != "down") {
+          snake_direction = "up";
+        }
+      } else if (keyCode == DOWN) {
+        if (snake_direction != "up") {
+          snake_direction = "down";
+        }
+      } else if (keyCode == LEFT) {
+        if (snake_direction != "right") {
+          snake_direction = "left";
+        }
+      } else if (keyCode == RIGHT) {
+        if (snake_direction != "left") {
+          snake_direction = "right";
+        }
+      }
+    }
+
+    function gameOver() {
+      noLoop();
+      text("Game Over!", width / 2, height / 2);
+      // Add a retry button
+      var retryButton = createButton("Retry");
+      retryButton.position(width / 2 - retryButton.width / 2, height / 2 + 50);
+      retryButton.onClick(function() {
+        setup();
+        loop();
+      });
+    }
+  </script>
+</body>
+</html>
