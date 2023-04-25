@@ -1,0 +1,26 @@
+body {
+  background-color: black;
+}
+
+canvas {
+  width: 600px;
+  height: 400px;
+}
+
+snake {
+  fill: red;
+  stroke: black;
+  stroke-width: 2px;
+}
+
+food {
+  fill: green;
+  stroke: black;
+  stroke-width: 2px;
+}
+
+score {
+  font-family: sans-serif;
+  font-size: 20px;
+  color: white;
+}
